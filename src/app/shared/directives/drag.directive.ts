@@ -7,11 +7,25 @@ export class DragDirective {
 
   @HostBinding('draggable') public draggable = true;
   @HostBinding('class.over') public isIn = false;
-  @Input('index') public index!:number;
-  @Output() public switch: EventEmitter<{ srcIndex:number, dstIbdex:number }> = new EventEmitter()
+  @Input('itemIndex') public itemIndex!:number;
+  @Input('listIndex') public listIndex!:number;
+  @Output() public switch: EventEmitter<
+    {
+      src:
+      {
+        itemIndex:number,
+        listIndex:number,
+      },
+      dst:
+      {
+        itemIndex:number,
+        listIndex:number,
+      },
+    }> = new EventEmitter()
 
   @HostListener('dragstart', ['$event']) public dragStart($event: any): void {
-    $event.dataTransfer.setData('srcIndex', this.index  )
+    $event.dataTransfer.setData('itemIndex', this.itemIndex  )
+    $event.dataTransfer.setData('listIndex', this.listIndex  )
   }
   @HostListener('dragenter') public dragEnter(){
     this.isIn = true;
@@ -27,8 +41,17 @@ export class DragDirective {
   @HostListener('drop', ['$event']) public drop($event: any): void {
     this.isIn = false;
     this.switch.emit({
-      srcIndex: $event.dataTransfer.getData('srcIndex'),
-      dstIbdex: this.index})
+      src:
+      {
+        itemIndex:$event.dataTransfer.getData('itemIndex'),
+        listIndex:$event.dataTransfer.getData('listIndex'),
+      },
+      dst:
+      {
+        itemIndex:this.itemIndex,
+        listIndex:this.listIndex,
+      }
+    })
   }
 
   constructor() { }

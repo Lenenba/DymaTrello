@@ -17,6 +17,14 @@ export class AppComponent {
         {content: 'Second todo'},
         {content: 'third todo'},
       ]
+    },
+    {
+      label: 'To do Done',
+      items:[
+        {content: 'Done todo 1'},
+        {content: 'Done todo 2'},
+        {content: 'Done  todo 3'},
+      ]
     }
   ];
 
@@ -39,10 +47,24 @@ export class AppComponent {
     this.itemContent = '';
   }
 
-  public switchIten($event:{ srcIndex:number, dstIbdex:number }): void{
-    const tmp = this.lists[0].items[$event.srcIndex]
-
-    this.lists[0].items[$event.srcIndex] = this.lists[0].items[$event.dstIbdex]
-    this.lists[0].items[$event.dstIbdex] = tmp
+  public switchIten($event:{
+    src:
+    {
+      itemIndex:number,
+      listIndex:number,
+    },
+    dst:
+    {
+      itemIndex:number,
+      listIndex:number,
+    },
+  }): void{
+    [
+      this.lists[$event.src.listIndex].items[$event.src.itemIndex],
+      this.lists[$event.dst.listIndex].items[$event.dst.itemIndex]
+    ] = [
+      this.lists[$event.dst.listIndex].items[$event.dst.itemIndex],
+      this.lists[$event.src.listIndex].items[$event.src.itemIndex]
+    ];
   }
 }
